@@ -19,7 +19,7 @@ symbol_count = {
     "D" : 8
 }
 
-symbol_count = {
+symbol_value = {
     "A" : 5,
     "B" : 4,
     "C" : 3,
@@ -28,6 +28,7 @@ symbol_count = {
 
 def check_winnings(columns, lines, bet, values):
     winnings = 0
+    winning_lines = []
     for line in range(lines):
         symbol = columns[0][line]
         for column in columns:
@@ -37,9 +38,10 @@ def check_winnings(columns, lines, bet, values):
         
         else:
             winnings += values[symbol] * bet
+            winning_lines.append(lines)
 
     
-    return winnings
+    return winnings, winning_lines
 
 
 
@@ -138,12 +140,9 @@ def get_bet():
     return bet
 
         
+def game(balance):
 
-
-
-#call the function
-def main():
-    balance = deposit()
+    
     lines = get_number_of_lines()
     #we need to check the entered bet amount is in range of the deposit money
     while True:
@@ -163,9 +162,33 @@ def main():
 
     print_slot_machine(slots)
 
+    winnings, winning_lines = check_winnings(slots, lines, bets, symbol_value)
+    print(f"You won ${winnings}." )
+    print(f"you won on lines:", *winning_lines )
+
+    return winnings - total_bet
 
 
 
+
+
+
+
+
+
+#call the function
+def main():
+    balance = deposit()
+    while True:
+        print(f"Current balance is ${balance}")
+        answer = input("press enter to spin (q to quit).")
+        if answer == "q":
+            break
+
+        balance += game(balance)
+
+    
+    print("You are left with ${balance}")
 
 
 #call main function
